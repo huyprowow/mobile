@@ -23,5 +23,6 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun Test(){
+  val z=3;
     val x=1;
 }
