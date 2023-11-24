@@ -23,13 +23,16 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun Test(){
+    val x = remember {
+        mutableStateOf("")
+    }
     Row {
-        var x =""
+
         Text("Huy")
         Button(onClick = {
-            x="click";
+            x.value="click"
         }) {
-            Text(x)
+            Text(x.value)
         }
     }
 }
