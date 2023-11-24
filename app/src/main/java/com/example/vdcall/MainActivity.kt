@@ -29,7 +29,7 @@ fun Test(){
     Row {
         Text("Huy")
         Button(onClick = {
-            s.value="click"
+            s.value="click!"
         }) {
             Text(s.value)
         }
