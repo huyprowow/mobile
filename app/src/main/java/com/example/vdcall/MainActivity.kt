@@ -3,7 +3,6 @@ package com.example.vdcall
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -24,7 +23,15 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun Test(){
-   Column {
-       Text("a")
-   }
+    val s = remember {
+        mutableStateOf("")
+    }
+    Row {
+        Text("Huy")
+        Button(onClick = {
+            s.value="click"
+        }) {
+            Text(s.value)
+        }
+    }
 }
