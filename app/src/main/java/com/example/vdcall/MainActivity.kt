@@ -24,4 +24,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Test(){
     val y=1;
+  val z=3;
+    val x=1;
+    Row {
+        Text("xx")
+    }
 }
