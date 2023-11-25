@@ -21,7 +21,7 @@ fun AppNavHost(
     navController: NavHostController,
     it: PaddingValues
 ){
-    val activity = (LocalContext.current as Activity)
+//    val activity = (LocalContext.current as Activity)
     NavHost(navController = navController, startDestination = Screen.Home.route, modifier = Modifier.padding(it)) {
         composable(route = Screen.Home.route) {
             HomeScreen()
