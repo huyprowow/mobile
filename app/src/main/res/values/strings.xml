@@ -4,4 +4,10 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_test">Test</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_activity_login_screen">LoginScreen</string>
+    <string name="ic_home_description">Home</string>
+    <string name="ic_chat_description">Chat</string>
+    <string name="ic_manage_account_description">account</string>
+
 </resources>
