@@ -10,6 +10,9 @@ fun SignUpScreen(){
     Text(
         text = "SignUp"
     )
+    Text(
+        text = "SignUp"
+    )
 }
 @Preview(showBackground = true)
 @Composable

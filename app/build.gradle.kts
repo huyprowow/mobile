@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -21,8 +22,12 @@ android {
     }
 
     buildTypes {
+       debug {
+           buildConfigField("String", "API_BASE_URL", "\"http://localhost:3080/api\"")
+       }
         release {
             isMinifyEnabled = false
+            buildConfigField("String", "API_BASE_URL", "\"https://vd-call-web-service.onrender.com/api\"")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -39,6 +44,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
@@ -49,7 +55,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-
+    kapt {
+        generateStubs = true
+    }
 
 }
 
@@ -85,15 +93,30 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
     // Moshi// Retrofit with Moshi Converter
-    implementation("com.squareup.moshi:moshi-kotlin")
-    implementation("com.squareup.retrofit2:retrofit")
-    implementation("com.squareup.retrofit2:converter-moshi")
+    implementation("com.squareup.moshi:moshi:1.8.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.8.0")
+    implementation("com.squareup.retrofit2:retrofit:2.5.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.5.0")
 
-
-    implementation("com.squareup.retrofit2:converter-moshi")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android")
+    //di
 
+    implementation("com.google.dagger:dagger:2.48.1")
+    kapt("com.google.dagger:dagger-compiler:2.48.1")
+
+    //data store preference
+    dependencies {
+        implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+        // optional - RxJava2 support
+        implementation("androidx.datastore:datastore-preferences-rxjava2:1.0.0")
+
+        // optional - RxJava3 support
+        implementation("androidx.datastore:datastore-preferences-rxjava3:1.0.0")
+    }
+
+    //compose
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
