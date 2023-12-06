@@ -11,14 +11,18 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.example.vdcall.compose.App
 import com.example.vdcall.ui.VdcallTheme
 import com.example.vdcall.utilities.EXAMPLE_COUNTER
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "preferencesDataStore")
-class MainActivity : ComponentActivity(),CoroutineScope {
+@AndroidEntryPoint
+
+class MainActivity : ComponentActivity(),CoroutineScope by MainScope()  {
     private var job: Job = Job()
 
     override val coroutineContext: CoroutineContext

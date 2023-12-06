@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +17,8 @@ import com.example.vdcall.compose.screen.authen.singin.SignInScreen
 import com.example.vdcall.compose.screen.home.HomeScreen
 import com.example.vdcall.compose.screen.roomdetail.RoomDetailScreen
 import com.example.vdcall.compose.screen.roomlist.RoomScreen
+import com.example.vdcall.viewmodels.Room.RoomListViewModel
+
 @Composable
 fun AppNavHost(
     navController: NavHostController,

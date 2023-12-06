@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("com.google.dagger.hilt.android") version "2.49" apply false
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -23,11 +25,11 @@ android {
 
     buildTypes {
        debug {
-           buildConfigField("String", "API_BASE_URL", "\"http://localhost:3080/api\"")
+           buildConfigField("String", "API_BASE_URL", "\"http://localhost:3080/api/\"")
        }
         release {
             isMinifyEnabled = false
-            buildConfigField("String", "API_BASE_URL", "\"https://vd-call-web-service.onrender.com/api\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://vd-call-web-service.onrender.com/api/\"")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -57,6 +59,13 @@ android {
     }
     kapt {
         generateStubs = true
+        correctErrorTypes = true
+        javacOptions {
+            // These options are normally set automatically via the Hilt Gradle plugin, but we
+            // set them manually to workaround a bug in the Kotlin 1.5.20
+            option("-Adagger.fastInit=ENABLED")
+            option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
+        }
     }
 
 }
@@ -101,20 +110,22 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android")
     //di
-
     implementation("com.google.dagger:dagger:2.48.1")
-    kapt("com.google.dagger:dagger-compiler:2.48.1")
-
+    kapt("com.google.dagger:dagger-compiler:2.40.1")
+    implementation("com.google.dagger:hilt-android:2.49")
+    api("com.google.dagger:dagger-android:2.38.1")
+    api("com.google.dagger:dagger-android-support:2.38.1")
+    kapt("com.google.dagger:dagger-android-processor:2.38.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.49")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     //data store preference
-    dependencies {
-        implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
-        // optional - RxJava2 support
-        implementation("androidx.datastore:datastore-preferences-rxjava2:1.0.0")
+    // optional - RxJava2 support
+    implementation("androidx.datastore:datastore-preferences-rxjava2:1.0.0")
 
-        // optional - RxJava3 support
-        implementation("androidx.datastore:datastore-preferences-rxjava3:1.0.0")
-    }
+    // optional - RxJava3 support
+    implementation("androidx.datastore:datastore-preferences-rxjava3:1.0.0")
 
     //compose
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
@@ -173,4 +184,6 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation("androidx.work:work-runtime:2.3.1")
+    implementation("androidx.startup:startup-runtime:1.0.0")
 }

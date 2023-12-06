@@ -1,5 +1,7 @@
 package com.example.vdcall.compose.screen.roomlist
 
+import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,121 +14,162 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.CoPresent
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
+//import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.vdcall.compose.navigation.AppTopBar
+import com.example.vdcall.data.repository.room.RoomRepository
 import com.example.vdcall.dataStore
 import com.example.vdcall.ui.VdcallTheme
 import com.example.vdcall.utilities.EXAMPLE_COUNTER
+import com.example.vdcall.viewmodels.Room.RoomListViewModel
 import kotlinx.coroutines.flow.map
 
-fun getUser(){
-
-}
 @Composable
+fun RoomScreen(navController: NavController,
+               viewModel:RoomListViewModel= hiltViewModel()
 
-fun RoomScreen(navController: NavController) {
-    val context= LocalContext.current
-    var userName by remember { mutableStateOf("") }
-    var openAlertDialog by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        context.dataStore.data.map {
-            it[EXAMPLE_COUNTER] ?: ""
-        }.collect { value ->
-            userName = value
+) {
+//    val context= LocalContext.current
+//    var userName by remember { mutableStateOf("") }
+//    var openJoinRoomDialog by remember { mutableStateOf(false) }
+//    var openCreateRoomDialog by remember { mutableStateOf(false) }
+//    val scope = rememberCoroutineScope()
+//    LaunchedEffect(Unit) {
+//        context.dataStore.data.map {
+//            it[EXAMPLE_COUNTER] ?: ""
+//        }.collect { value ->
+//            userName = value
+//        }
+//
+//
+//    }
+    val userName by viewModel.userName.observeAsState("")
+    val openJoinRoomDialog by  viewModel.openJoinRoomDialog.observeAsState(false)
+    val openCreateRoomDialog by  viewModel.openCreateRoomDialog.observeAsState(false)
+    AppTopBar(navController,"Danh sách phòng${userName}", { actionIcon({viewModel.toggleJoinRoomDialog()}) })
+    Box(modifier = Modifier.fillMaxSize()){
+        Column {
+
+        }
+        FloatingActionButton(onClick = { viewModel.toggleCreateRoomDialog() },shape = CircleShape,
+                modifier = Modifier
+                    .padding(all = 16.dp)
+                    .align(alignment = Alignment.BottomEnd)) {
+            Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = "Join Room"
+                )
         }
     }
-    AppTopBar(navController,"Danh sách phòng", { actionIcon({openAlertDialog=true}) })
     when {
-        openAlertDialog -> {
+        openJoinRoomDialog -> {
             JoinRoomDiaLog(
-                onDismissRequest = { openAlertDialog = false },
-                onConfirmation = {
-                    openAlertDialog = false
-                    println("Confirmation registered") // Add logic here to handle confirmation.
+                onDismissRequest = { viewModel.toggleJoinRoomDialog()},
+                onConfirmation = fun (roomName:String,roomPassword:String){
+                    // Add logic here to handle confirmation.
+                    viewModel.toggleJoinRoomDialog()
+                    Log.d("Debug", "Confirmation registered ${roomName},${roomPassword}")
                 },
                 dialogTitle = "Join Room"
             )
         }
     }
+    when {
+        openCreateRoomDialog -> {
+            CreateRoomDiaLog(
+                onDismissRequest = {viewModel.toggleCreateRoomDialog()},
+                onConfirmation = fun (roomName:String,roomPassword:String,roomDescription:String){
+                    // Add logic here to handle confirmation.
+                    viewModel.toggleCreateRoomDialog()
+//                    createRoom()
+                    Log.d("Debug", "Confirmation registered ${roomName},${roomPassword},${roomDescription}")
+                },
+                dialogTitle = "Create Room"
+            )
+        }
+    }
 }
 @Composable
-fun actionIcon(onClick:()->Unit){
+fun actionIcon(onOpenJoinRoomDialog:()->Unit,){
     IconButton(
         onClick = {
-           onClick()
+            onOpenJoinRoomDialog()
         }
     ){
         Icon(
-            imageVector = Icons.Filled.Add,
-            contentDescription = "Localized description"
+            imageVector = Icons.Filled.CoPresent,
+            contentDescription = "Join Room"
         )
     }
 
 }
+//@Preview
+//@Composable
+//fun JoinRoomDiaLogPreview(){
+//    JoinRoomDiaLog({ fun test() {} },{ fun test() {} },"title")
+//}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JoinRoomDiaLog(
     onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit,
+    onConfirmation:  (roomName:String,roomPassword:String) -> Unit,
     dialogTitle: String,
 ) {
     var roomName by remember { mutableStateOf("") }
     var roomPassword by remember { mutableStateOf("") }
-    var roomDescription by remember { mutableStateOf("") }
     AlertDialog(
-        icon = {
-
-        },
+        icon = {},
         title = {
             Text(text = dialogTitle)
         },
         text = {
+            Column{
+                Spacer(modifier = Modifier.size(2.dp))
+                OutlinedTextField(
+                    value = roomName,
+                    onValueChange = { roomName = it },
+                    label = { Text("Room Name") },
+                    placeholder = { Text("Enter room name") },
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.size(2.dp))
+                OutlinedTextField(
+                    value = roomPassword,
+                    onValueChange = { roomPassword = it },
+                    label = { Text("Room Password") },
+                    placeholder = { Text("Enter Password") },
+                    singleLine = true
+                )
 
-                Column(modifier = Modifier.padding(10.dp,0.dp)){
-                    OutlinedTextField(
-
-                        value = roomName,
-                        onValueChange = { roomName = it },
-                        label = { Text("Room Name") },
-                        placeholder = { Text("Enter room name") },
-                        singleLine = true
-                    )
-                    Spacer(modifier = Modifier.size(2.dp))
-                    OutlinedTextField(
-
-                        value = roomPassword,
-                        onValueChange = { roomPassword = it },
-                        label = { Text("Room Password") },
-                        placeholder = { Text("Enter Password") },
-                        singleLine = true
-                    )
-
-//                    OutlinedTextField(
-//
-//                        value = roomDescription,
-//                        onValueChange = { roomDescription = it },
-//                        label = { Text("Description") },
-//                        placeholder = { Text("Description") },
-//                        singleLine = true
-//                    )
-                }
+            }
 
         },
         onDismissRequest = {
@@ -135,7 +178,7 @@ fun JoinRoomDiaLog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    onConfirmation()
+                    onConfirmation(roomName,roomPassword)
                 }
             ) {
                 Text("Join")
@@ -151,12 +194,100 @@ fun JoinRoomDiaLog(
             }
         }
     )
+
+}
+//@Preview
+//@Composable
+//fun CreateRoomDiaLogPreview(){
+//    CreateRoomDiaLog({ fun test() {} },{ fun test() {} },"title")
+//}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CreateRoomDiaLog(
+    onDismissRequest: () -> Unit,
+    onConfirmation: (roomName:String,roomPassword:String,roomDescription:String) -> Unit,
+    dialogTitle: String,
+) {
+    var roomName by remember { mutableStateOf("") }
+    var roomPassword by remember { mutableStateOf("") }
+    var roomDescription by remember { mutableStateOf("") }
+
+    Dialog(
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+        onDismissRequest = { onDismissRequest() }
+    ){
+        Surface(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    IconButton(
+                        onClick = {
+                            onDismissRequest()
+                        }
+                    ){
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = "Close"
+                        )
+                    }
+                    Text(text = dialogTitle)
+                    TextButton(
+                        onClick = {
+                            onConfirmation(roomName,roomPassword,roomDescription)
+                        }
+                    ) {
+                        Text("Create")
+                    }
+                }
+                Column(
+                    modifier = Modifier
+                        .padding(10.dp, 0.dp)
+                        .fillMaxSize()
+                ){
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = roomName,
+                        onValueChange = { roomName = it },
+                        label = { Text("Room Name") },
+                        placeholder = { Text("Enter room name") },
+                        singleLine = true
+                    )
+                    Spacer(modifier = Modifier.size(5.dp))
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = roomPassword,
+                        onValueChange = { roomPassword = it },
+                        label = { Text("Room Password") },
+                        placeholder = { Text("Enter Password") },
+                        singleLine = true
+                    )
+                    Spacer(modifier = Modifier.size(5.dp))
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(120.dp),
+                        value = roomDescription,
+                        onValueChange = { roomDescription = it },
+                        label = { Text("Description") },
+                        placeholder = { Text("Description") },
+                        maxLines = 3
+                    )
+                }
+            }
+
+        }
+    }
+
 }
 
 @Preview(showBackground = true)
 @Composable
 fun RoomPreview() {
     VdcallTheme {
-        RoomScreen(rememberNavController())
+//        RoomScreen(rememberNavController())
+//        CreateRoomDiaLog({ fun test() {} },fun  (roomName:String,roomPassword:String,roomDescription:String) {} ,"title")
+        JoinRoomDiaLog({ fun test() {} } , fun  (roomName: String, roomPassword: String) {} ,"title")
     }
 }
