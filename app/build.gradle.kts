@@ -25,7 +25,7 @@ android {
 
     buildTypes {
        debug {
-           buildConfigField("String", "API_BASE_URL", "\"http://localhost:3080/api/\"")
+           buildConfigField("String", "API_BASE_URL", "\"http://192.168.1.4:3080/api/\"")
        }
         release {
             isMinifyEnabled = false
@@ -104,7 +104,7 @@ dependencies {
     // Moshi// Retrofit with Moshi Converter
     implementation("com.squareup.moshi:moshi:1.8.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.8.0")
-    implementation("com.squareup.retrofit2:retrofit:2.5.0")
+    implementation("com.squareup.retrofit2:retrofit:2.6.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.5.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
@@ -144,7 +144,7 @@ dependencies {
     // Choose one of the following:
     // Material Design 3
     implementation("androidx.compose.material3:material3")
-
+    implementation("io.coil-kt:coil-compose:2.4.0")
     // Android Studio Preview support
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation("androidx.compose.ui:ui-tooling")

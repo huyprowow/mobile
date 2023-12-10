@@ -38,14 +38,16 @@ import com.example.vdcall.compose.screen.roomlist.RoomScreen
 @Composable
 fun App(){
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
 //    val currentSelectedScreen by navController.currentScreenAsState()
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
+    val currentRoute = navBackStackEntry?.destination?.route
     Scaffold(
         bottomBar = {
-            if(currentRoute!=Screen.SignIn.route&&currentRoute!=Screen.SignUp.route)
-            {
-                AppBottomNavBar(navController)
+            when{
+                (currentRoute==Screen.Home.route||currentRoute==Screen.Room.route||currentRoute==Screen.Account.route)->
+                    AppBottomNavBar(navController)
             }
+
         }
     ) {
         AppNavHost(navController,it)

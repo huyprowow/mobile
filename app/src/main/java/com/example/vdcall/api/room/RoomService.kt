@@ -5,30 +5,34 @@ import com.example.vdcall.data.repository.room.RoomResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Query
+
+//android:networkSecurityConfig="@xml/network_security_config"
 
 interface RoomService {
-    @GET("room")
+    @FormUrlEncoded
+    @POST("room")
     suspend fun getUserRoom(
-      @Query("userName") userName: String,
-    ): RoomResponse.GetAllRoomResponse
-
+        @Field("userName") userName: String,
+    ): List<RoomResponse.GetAllRoomResponse>
+    @FormUrlEncoded
     @POST("room/join")
     suspend fun joinRoom(
-        @Query("roomName") roomName: String,
-        @Query("roomPassword") roomPassword: String,
-        @Query("userName") userName: String,
-    ) //:RoomResponse.JoinRoomResponse
-
+        @Field("roomName") roomName: String,
+        @Field("roomPassword") roomPassword: String,
+        @Field("userName") userName: String,
+    ):Any //:RoomResponse.JoinRoomResponse
+    @FormUrlEncoded
     @POST("room/new")
     suspend fun createRoom(
-        @Query("roomName") roomName: String,
-        @Query("roomPassword") roomPassword: String,
-        @Query("roomDescription") roomDescription: String,
-        @Query("userName") userName: String,
-    )// :RoomResponse.CreateRoomResponse
+        @Field("roomName") roomName: String,
+        @Field("roomPassword") roomPassword: String,
+        @Field("roomDescription") roomDescription: String,
+        @Field("userName") userName: String,
+    ):Any// :RoomResponse.CreateRoomResponse
     companion object:APIClient() {
         fun create(): RoomService? {
               return client?.create(RoomService::class.java)

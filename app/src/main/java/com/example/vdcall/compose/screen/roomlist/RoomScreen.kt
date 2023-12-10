@@ -1,6 +1,10 @@
 package com.example.vdcall.compose.screen.roomlist
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,10 +21,23 @@ import androidx.compose.material3.IconButton
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CoPresent
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemColors
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -35,15 +52,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 //import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.vdcall.Screen
 import com.example.vdcall.compose.navigation.AppTopBar
 import com.example.vdcall.data.repository.room.RoomRepository
 import com.example.vdcall.dataStore
@@ -51,7 +73,9 @@ import com.example.vdcall.ui.VdcallTheme
 import com.example.vdcall.utilities.EXAMPLE_COUNTER
 import com.example.vdcall.viewmodels.Room.RoomListViewModel
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun RoomScreen(navController: NavController,
                viewModel:RoomListViewModel= hiltViewModel()
@@ -74,31 +98,87 @@ fun RoomScreen(navController: NavController,
     val userName by viewModel.userName.observeAsState("")
     val openJoinRoomDialog by  viewModel.openJoinRoomDialog.observeAsState(false)
     val openCreateRoomDialog by  viewModel.openCreateRoomDialog.observeAsState(false)
-    AppTopBar(navController,"Danh sách phòng${userName}", { actionIcon({viewModel.toggleJoinRoomDialog()}) })
-    Box(modifier = Modifier.fillMaxSize()){
-        Column {
+    val rooms by viewModel.rooms.observeAsState()
+    val scope= rememberCoroutineScope()
 
+    Box(modifier = Modifier.fillMaxSize()){
+        LazyColumn(
+        ) {
+            stickyHeader{
+                AppTopBar(navController,"Danh sách phòng của ${userName}", { actionIcon({viewModel.toggleJoinRoomDialog()},{viewModel.getAllRoom(userName)}) },"")
+            }
+            Log.d("Debug", "$rooms")
+
+            rooms?.size?.let {
+                items(count= it){index->
+                    val room = rooms!![index % rooms!!.size]
+                    ListItem(
+                        headlineText = { Text(text=room.roomName, fontWeight = FontWeight.W700, fontSize = 17.sp) },
+                        supportingText = { Text(room.roomDescription) },
+                        leadingContent = {
+                                Image(imageVector = Icons.Filled.FavoriteBorder, contentDescription = "avatar", modifier = Modifier
+                                    .size(32.dp)
+                                    .clip(
+                                        CircleShape
+                                    ))
+                        },
+                        modifier = Modifier
+                            .clickable(
+                                onClick = {
+                                    navController.navigate(
+                                        Screen.RoomDetail.createRoute(
+                                            room._id
+                                        )
+                                    )
+                                },
+                            )
+                            .padding(16.dp, 0.dp)
+                            .clip(
+                                CutCornerShape(
+                                    topStart = 15.dp,
+                                    topEnd = 10.dp,
+                                    bottomEnd = 0.dp,
+                                    bottomStart = 10.dp
+                                )
+                            ),
+                        colors = ListItemDefaults.colors(containerColor=MaterialTheme.colorScheme.secondaryContainer),
+                        shadowElevation = 2.dp,
+                        tonalElevation = 2.dp
+                    )
+                    Spacer(modifier = Modifier.size(8.dp))
+                }
+            }
         }
         FloatingActionButton(onClick = { viewModel.toggleCreateRoomDialog() },shape = CircleShape,
-                modifier = Modifier
-                    .padding(all = 16.dp)
-                    .align(alignment = Alignment.BottomEnd)) {
+            modifier = Modifier
+                .padding(all = 16.dp)
+                .align(alignment = Alignment.BottomEnd)) {
             Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "Join Room"
-                )
+                imageVector = Icons.Filled.Add,
+                contentDescription = "Join Room"
+            )
         }
     }
+
     when {
         openJoinRoomDialog -> {
             JoinRoomDiaLog(
                 onDismissRequest = { viewModel.toggleJoinRoomDialog()},
                 onConfirmation = fun (roomName:String,roomPassword:String){
                     // Add logic here to handle confirmation.
+
+                    scope.launch {
+                         try{
+                            viewModel.joinRoom(roomName,roomPassword,userName)
+                            Log.d("Debug", "Join Room ${roomName},${roomPassword},${userName}")
+                            }catch (error: Exception){
+                                Log.d("Debug", "${error}")
+
+                         }
+                    }
                     viewModel.toggleJoinRoomDialog()
-                    Log.d("Debug", "Confirmation registered ${roomName},${roomPassword}")
                 },
-                dialogTitle = "Join Room"
+                dialogTitle = "Join Room",
             )
         }
     }
@@ -108,17 +188,26 @@ fun RoomScreen(navController: NavController,
                 onDismissRequest = {viewModel.toggleCreateRoomDialog()},
                 onConfirmation = fun (roomName:String,roomPassword:String,roomDescription:String){
                     // Add logic here to handle confirmation.
+                    scope.launch {
+                        try {
+                            val res= viewModel.createRoom(roomName,roomPassword,roomDescription,userName)
+                            Log.d("Debug", "Confirmation registered ${roomName},${roomPassword},${roomDescription}")
+                            Log.d("Debug", "${res}")
+                        }catch (error: Exception){
+                            Log.d("Debug", "${error}")
+                        }
+                    }
                     viewModel.toggleCreateRoomDialog()
-//                    createRoom()
-                    Log.d("Debug", "Confirmation registered ${roomName},${roomPassword},${roomDescription}")
+
                 },
-                dialogTitle = "Create Room"
+                dialogTitle = "Create Room",
+
             )
         }
     }
 }
 @Composable
-fun actionIcon(onOpenJoinRoomDialog:()->Unit,){
+fun actionIcon(onOpenJoinRoomDialog:()->Unit,reloadRoom:()->Unit){
     IconButton(
         onClick = {
             onOpenJoinRoomDialog()
@@ -127,6 +216,16 @@ fun actionIcon(onOpenJoinRoomDialog:()->Unit,){
         Icon(
             imageVector = Icons.Filled.CoPresent,
             contentDescription = "Join Room"
+        )
+    }
+    IconButton(
+        onClick = {
+            reloadRoom()
+        }
+    ){
+        Icon(
+            imageVector = Icons.Filled.Refresh,
+            contentDescription = "Reload Room"
         )
     }
 
@@ -211,7 +310,6 @@ fun CreateRoomDiaLog(
     var roomName by remember { mutableStateOf("") }
     var roomPassword by remember { mutableStateOf("") }
     var roomDescription by remember { mutableStateOf("") }
-
     Dialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         onDismissRequest = { onDismissRequest() }
@@ -286,8 +384,8 @@ fun CreateRoomDiaLog(
 @Composable
 fun RoomPreview() {
     VdcallTheme {
-//        RoomScreen(rememberNavController())
+        RoomScreen(rememberNavController())
 //        CreateRoomDiaLog({ fun test() {} },fun  (roomName:String,roomPassword:String,roomDescription:String) {} ,"title")
-        JoinRoomDiaLog({ fun test() {} } , fun  (roomName: String, roomPassword: String) {} ,"title")
+//        JoinRoomDiaLog({ fun test() {} } , fun  (roomName: String, roomPassword: String) {} ,"title")
     }
 }

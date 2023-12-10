@@ -22,7 +22,7 @@ import kotlin.coroutines.CoroutineContext
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "preferencesDataStore")
 @AndroidEntryPoint
 
-class MainActivity : ComponentActivity(),CoroutineScope by MainScope()  {
+class MainActivity : ComponentActivity(),CoroutineScope  {
     private var job: Job = Job()
 
     override val coroutineContext: CoroutineContext

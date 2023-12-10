@@ -36,7 +36,8 @@ fun AppNavHost(
             arguments = Screen.RoomDetail.navArguments
         ) {
             RoomDetailScreen(
-//               onBackClick = { navController.navigateUp() },
+                navController,
+                ""
 //               onShareClick = {
 //                    createShareIntent(activity, it)
 //               }
