@@ -1,5 +1,8 @@
 package com.example.vdcall.di
 
+import com.example.vdcall.api.authen.LoginService
+import com.example.vdcall.api.authen.RegisterService
+import com.example.vdcall.api.chat.ChatService
 import com.example.vdcall.api.room.RoomService
 import dagger.Module
 import dagger.Provides
@@ -14,5 +17,21 @@ class NetworkModule {
     @Provides
     fun provideRoomService(): RoomService? {
         return RoomService.create()
+    }
+    @Singleton
+    @Provides
+    fun provideChatService(): ChatService? {
+        return ChatService.create()
+    }
+    @Singleton
+    @Provides
+    fun provideLoginService(): LoginService? {
+        return LoginService.create()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRegisterService(): RegisterService? {
+        return RegisterService.create()
     }
 }
