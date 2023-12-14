@@ -127,7 +127,8 @@ fun RoomScreen(navController: NavController,
                                 onClick = {
                                     navController.navigate(
                                         Screen.RoomDetail.createRoute(
-                                            room._id
+                                            room._id,
+                                            room.roomName
                                         )
                                     )
                                 },
