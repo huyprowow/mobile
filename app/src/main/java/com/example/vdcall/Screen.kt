@@ -11,12 +11,17 @@ sealed class Screen(
     data object Home : Screen("home")
 
     data object RoomDetail : Screen(
-        route = "roomDetail/{roomId}",
-        navArguments = listOf(navArgument("roomId") {
+        route = "roomDetail/{roomId}/{roomName}",
+        navArguments = listOf(
+            navArgument("roomId") {
             type = NavType.StringType
-        })
+        },
+            navArgument("roomName") {
+                type = NavType.StringType
+            }
+        )
     ) {
-        fun createRoute(roomId: String) = "roomDetail/${roomId}"
+        fun createRoute(roomId: String,roomName:String) = "roomDetail/${roomId}/${roomName}"
     }
     data object Room : Screen("room")
     data object SignIn : Screen("signIn")

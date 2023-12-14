@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,13 +33,24 @@ fun AppNavHost(
             route = Screen.RoomDetail.route,
             arguments = Screen.RoomDetail.navArguments
         ) {
-            RoomDetailScreen(
-                navController,
-                ""
-//               onShareClick = {
-//                    createShareIntent(activity, it)
-//               }
-            )
+                navBackStackEntry ->
+            /* Extracting the id from the route */
+            val roomId = navBackStackEntry.arguments?.getString("roomId")
+            val roomName = navBackStackEntry.arguments?.getString("roomName")
+            /* We check if it's not null */
+            roomId?.let { roomId->
+                roomName?.let { roomName ->
+                    RoomDetailScreen(
+                        navController,
+                        roomId,
+                        roomName
+    //               onShareClick = {
+    //                    createShareIntent(activity, it)
+    //               }
+                    )
+                }
+            }
+
         }
         composable(
             route = Screen.Room.route,
