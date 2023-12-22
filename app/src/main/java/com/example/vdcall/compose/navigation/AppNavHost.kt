@@ -25,7 +25,7 @@ fun AppNavHost(
     it: PaddingValues
 ){
 //    val activity = (LocalContext.current as Activity)
-    NavHost(navController = navController, startDestination = Screen.Room.route, modifier = Modifier.padding(it)) {
+    NavHost(navController = navController, startDestination = Screen.SignIn.route, modifier = Modifier.padding(it)) {
         composable(route = Screen.Home.route) {
             HomeScreen(
                 navController
@@ -62,7 +62,7 @@ fun AppNavHost(
         composable(
             route = Screen.SignIn.route,
         ) {
-            SignInScreen()
+            SignInScreen(navController)
         }
         composable(
             route = Screen.SignUp.route,

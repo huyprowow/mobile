@@ -25,11 +25,11 @@ android {
 
     buildTypes {
        debug {
-           buildConfigField("String", "API_BASE_URL", "\"http://192.168.1.4:3080/api/\"")
+           buildConfigField("String", "API_BASE_URL", "\"http://192.168.1.3:3080/\"")
        }
         release {
             isMinifyEnabled = false
-            buildConfigField("String", "API_BASE_URL", "\"https://vd-call-web-service.onrender.com/api/\"")
+            buildConfigField("String", "API_BASE_URL", "\"https://vd-call-web-service.onrender.com/\"")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -126,6 +126,8 @@ dependencies {
 
     // optional - RxJava3 support
     implementation("androidx.datastore:datastore-preferences-rxjava3:1.0.0")
+    //socket
+    implementation("io.socket:socket.io-client:2.0.0")
 
     //compose
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")

@@ -14,19 +14,19 @@ import retrofit2.http.POST
 
 interface RoomService {
     @FormUrlEncoded
-    @POST("room")
+    @POST("api/room")
     suspend fun getUserRoom(
         @Field("userName") userName: String,
     ): List<RoomResponse.GetAllRoomResponse>
     @FormUrlEncoded
-    @POST("room/join")
+    @POST("api/room/join")
     suspend fun joinRoom(
         @Field("roomName") roomName: String,
         @Field("roomPassword") roomPassword: String,
         @Field("userName") userName: String,
     ):Any //:RoomResponse.JoinRoomResponse
     @FormUrlEncoded
-    @POST("room/new")
+    @POST("api/room/new")
     suspend fun createRoom(
         @Field("roomName") roomName: String,
         @Field("roomPassword") roomPassword: String,

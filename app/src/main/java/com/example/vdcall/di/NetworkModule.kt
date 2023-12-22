@@ -21,4 +21,5 @@ class NetworkModule {
     fun provideChatService(): ChatService? {
         return ChatService.create()
     }
+
 }

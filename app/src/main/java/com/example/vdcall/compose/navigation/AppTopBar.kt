@@ -1,5 +1,6 @@
 package com.example.vdcall.compose.navigation
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,11 +43,13 @@ fun AppTopBar(navController: NavController, title:String, actions:@Composable ()
                 when{
                     backClick->
                         IconButton(
-                            onClick = { navController.navigateUp() }
-                        ){
+                            onClick = {
+                                navController.navigateUp()
+                }){
                             Icon(
                                 imageVector = Icons.Filled.ArrowBackIos,
-                                contentDescription = "Localized description"
+                                contentDescription = "Localized description",
+
                             )
                         }
                 }
