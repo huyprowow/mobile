@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vdcall.data.repository.room.RoomRepository
+import com.example.vdcall.data.repository.room.RoomResponse
 import com.example.vdcall.data.repository.roomdetail.RoomDetailRepository
 import com.example.vdcall.data.repository.roomdetail.RoomDetailResponse
 import com.example.vdcall.dataStore
