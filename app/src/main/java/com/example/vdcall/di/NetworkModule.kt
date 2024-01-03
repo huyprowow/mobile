@@ -3,7 +3,6 @@ package com.example.vdcall.di
 import com.example.vdcall.api.chat.ChatService
 import com.example.vdcall.api.authen.LoginService
 import com.example.vdcall.api.authen.RegisterService
-import com.example.vdcall.api.chat.ChatService
 import com.example.vdcall.api.room.RoomService
 import dagger.Module
 import dagger.Provides
