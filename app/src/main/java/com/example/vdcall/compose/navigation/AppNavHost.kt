@@ -10,8 +10,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.vdcall.Screen
 import com.example.vdcall.compose.screen.account.AccountScreen
-import com.example.vdcall.compose.screen.authen.signup.SignUpScreen
-import com.example.vdcall.compose.screen.authen.singin.SignInScreen
 import com.example.vdcall.compose.screen.home.HomeScreen
 import com.example.vdcall.compose.screen.roomdetail.RoomDetailScreen
 import com.example.vdcall.compose.screen.roomlist.RoomScreen
@@ -23,7 +21,7 @@ fun AppNavHost(
     it: PaddingValues
 ){
 //    val activity = (LocalContext.current as Activity)
-    NavHost(navController = navController, startDestination = Screen.SignIn.route, modifier = Modifier.padding(it)) {
+    NavHost(navController = navController, startDestination = Screen.Room.route, modifier = Modifier.padding(it)) {
         composable(route = Screen.Home.route) {
             HomeScreen(
                 navController
@@ -57,16 +55,16 @@ fun AppNavHost(
         ) {
             RoomScreen( navController)
         }
-        composable(
-            route = Screen.SignIn.route,
-        ) {
-            SignInScreen(navController)
-        }
-        composable(
-            route = Screen.SignUp.route,
-        ) {
-            SignUpScreen()
-        }
+//        composable(
+//            route = Screen.SignIn.route,
+//        ) {
+//            SignInScreen(navController)
+//        }
+//        composable(
+//            route = Screen.SignUp.route,
+//        ) {
+//            SignUpScreen()
+//        }
         composable(
             route = Screen.Account.route,
         ) {

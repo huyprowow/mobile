@@ -45,7 +45,6 @@ class LoginActivity
         }.collect { value ->
             if (value != "") {
                 startActivity(Intent(this, MainActivity::class.java).apply {})
-
             }
         }
 

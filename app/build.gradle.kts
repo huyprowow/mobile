@@ -26,7 +26,7 @@ android {
 
     buildTypes {
        debug {
-           buildConfigField("String", "API_BASE_URL", "\"http://192.168.1.3:3080/\"")
+           buildConfigField("String", "API_BASE_URL", "\"http://192.168.1.7:3080/\"")
        }
         release {
             isMinifyEnabled = false
@@ -110,6 +110,10 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android")
+
+    //socket
+    implementation("io.socket:socket.io-client:2.0.0")
+
     //di
     implementation("com.google.dagger:dagger:2.48.1")
     kapt("com.google.dagger:dagger-compiler:2.40.1")
@@ -127,8 +131,6 @@ dependencies {
 
     // optional - RxJava3 support
     implementation("androidx.datastore:datastore-preferences-rxjava3:1.0.0")
-    //socket
-    implementation("io.socket:socket.io-client:2.0.0")
 
     //compose
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
