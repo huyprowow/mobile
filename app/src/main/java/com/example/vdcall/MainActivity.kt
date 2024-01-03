@@ -10,6 +10,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.vdcall.compose.App
 import com.example.vdcall.socket.SocketManager
+import com.example.vdcall.compose.screen.authen.signup.SignUpScreen
+import com.example.vdcall.compose.screen.authen.singin.SignInScreen
 import com.example.vdcall.ui.VdcallTheme
 import com.example.vdcall.utilities.EXAMPLE_COUNTER
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,7 +52,7 @@ class MainActivity : ComponentActivity(),CoroutineScope  {
 //        }
         setContent {
             VdcallTheme {
-                App()
+              App()
             }
         }
     }

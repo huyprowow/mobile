@@ -5,7 +5,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import android.content.Intent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,6 +24,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.vdcall.Screen
 import com.example.vdcall.dataStore
+import com.example.vdcall.Activity.LoginActivity
 import com.example.vdcall.ui.VdcallTheme
 import com.example.vdcall.utilities.EXAMPLE_COUNTER
 import kotlinx.coroutines.flow.map
@@ -127,6 +130,9 @@ fun SignInScreen(navController:NavController){
         }
     }
 
+fun SignInScreen(){
+    val mContext= LocalContext.current
+    mContext.startActivity(Intent(mContext, LoginActivity::class.java))
 }
 @Preview(showBackground = true)
 @Composable
