@@ -1,6 +1,9 @@
 package com.example.vdcall.di
 
+import android.app.Application
+import androidx.lifecycle.ViewModelProvider
 import com.example.vdcall.BuildConfig
+import com.example.vdcall.viewmodels.Room.RoomDetailViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

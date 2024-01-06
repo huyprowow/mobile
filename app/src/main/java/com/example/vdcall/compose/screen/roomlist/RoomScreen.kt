@@ -69,17 +69,19 @@ import com.example.vdcall.Screen
 import com.example.vdcall.compose.navigation.AppTopBar
 import com.example.vdcall.data.repository.room.RoomRepository
 import com.example.vdcall.dataStore
+import com.example.vdcall.socket.SocketListeners
+import com.example.vdcall.socket.SocketManager
 import com.example.vdcall.ui.VdcallTheme
 import com.example.vdcall.utilities.EXAMPLE_COUNTER
 import com.example.vdcall.viewmodels.Room.RoomListViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun RoomScreen(navController: NavController,
-               viewModel:RoomListViewModel= hiltViewModel()
-
+               viewModel:RoomListViewModel= hiltViewModel(),
 ) {
 //    val context= LocalContext.current
 //    var userName by remember { mutableStateOf("") }
@@ -105,7 +107,7 @@ fun RoomScreen(navController: NavController,
         LazyColumn(
         ) {
             stickyHeader{
-                AppTopBar(navController,"Danh sách phòng của ${userName}", { actionIcon({viewModel.toggleJoinRoomDialog()},{viewModel.getAllRoom(userName)}) },"")
+                AppTopBar(navController,"Danh sách phòng của ${userName}", { actionIcon({viewModel.toggleJoinRoomDialog()},{scope.launch { viewModel.getAllRoom(userName) }}) },"")
             }
             Log.d("Debug", "$rooms")
 

@@ -1,6 +1,7 @@
 package com.example.vdcall.data.repository.roomdetail
 
 class RoomDetailResponse {
+
     data class GetAllChatInRoomResponse(
 
        val _id: String,
@@ -25,6 +26,7 @@ data class NewChat (
 )
 
 data class User(
-   val _id: String,
-   val userName: String
+    val userName: String,
+   val _id: String
+
 )

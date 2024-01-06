@@ -31,7 +31,7 @@ import com.example.vdcall.ui.VdcallTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppTopBar(navController: NavController, title:String, actions:@Composable ()->Unit,ImgSrc:String?,backClick:Boolean=false){
+fun AppTopBar(navController: NavController, title:String, actions:@Composable ()->Unit,ImgSrc:String?,backClick:Boolean=false,backClickDes:String=""){
 
     TopAppBar(
         title = {
@@ -44,7 +44,11 @@ fun AppTopBar(navController: NavController, title:String, actions:@Composable ()
                     backClick->
                         IconButton(
                             onClick = {
-                                navController.navigateUp()
+                                if(backClickDes==""){
+                                    navController.navigateUp()
+                                }else{
+                                    navController.navigate(backClickDes)
+                                }
                 }){
                             Icon(
                                 imageVector = Icons.Filled.ArrowBackIos,

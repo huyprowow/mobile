@@ -107,7 +107,7 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.8.0")
     implementation("com.squareup.retrofit2:retrofit:2.6.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.5.0")
-
+    implementation("com.google.code.gson:gson:2.8.5")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android")
 
@@ -171,6 +171,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.6.1")
     // Optional - Integration with ViewModels
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
+    implementation("androidx.activity:activity-ktx:1.6.1")
     // Optional - Integration with LiveData
     implementation("androidx.compose.runtime:runtime-livedata")
     // Optional - Integration with RxJava

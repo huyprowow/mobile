@@ -16,6 +16,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.vdcall.data.repository.room.RoomRepository
 import com.example.vdcall.data.repository.room.RoomResponse
 import com.example.vdcall.dataStore
+import com.example.vdcall.socket.SocketManager
 import com.example.vdcall.utilities.EXAMPLE_COUNTER
 import dagger.assisted.Assisted
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,8 @@ import javax.inject.Inject
 class RoomListViewModel @Inject constructor(
     @ApplicationContext context: Context,
     private val roomRepository: RoomRepository,
+    private val socketManager: SocketManager,
+
 ):ViewModel() {
 //    private val _state=mutableStateOf(// dang ra la phai viet kieu nay ma luoi tao doi tuong :v
 //        object {
@@ -39,6 +42,7 @@ class RoomListViewModel @Inject constructor(
 //        }
 //    )
 //     val state:RoomListState= _state
+
     var _userName = MutableLiveData("")
     var _openJoinRoomDialog = MutableLiveData(false)
     var _openCreateRoomDialog = MutableLiveData(false)
@@ -55,20 +59,28 @@ class RoomListViewModel @Inject constructor(
                 it[EXAMPLE_COUNTER] ?: ""
             }.collect { value ->
                 _userName.value = value
+
                 Log.d("Debug", "userName: $value")
                 getAllRoom(value)
             }
         }
 
     }
-    fun getAllRoom(userName: String)
+    suspend fun getAllRoom(userName: String)
     {
-            viewModelScope.launch {
                 try {
+                    socketManager.setUserInfo(userName)
                     _rooms.value=roomRepository.getAllRoom(userName)
+
 //                    .collect{
 //                    = listOf(it)
-                    Log.d("Debug", "userName: ${_rooms.value}")
+                    val listRoomId = _rooms.value?.map { it._id }
+                    if (listRoomId != null) {
+                        socketManager.joinAllRoom(listRoomId)
+                        Log.d("Debug", "List room id: ${listRoomId}")
+
+                    }
+                    Log.d("Debug", "List room: ${_rooms.value}")
 
 //                }
                     Log.d("Debug", "userName: $userName")
@@ -76,7 +88,7 @@ class RoomListViewModel @Inject constructor(
                     Log.d("Debug", "$error")
 
                 }
-            }
+
     }
 
     suspend fun createRoom(roomName:String, roomPassword:String, roomDescription:String, userName: String){

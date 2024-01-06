@@ -211,7 +211,8 @@ fun RoomDetailPreview() {
                     {
                     },
                     "",
-                    backClick=true
+                    backClick=true,
+                    backClickDes=Screen.Room.route
                 )
             })
         {paddingValue->
