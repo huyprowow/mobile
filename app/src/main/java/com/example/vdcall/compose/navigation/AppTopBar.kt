@@ -27,28 +27,25 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.example.vdcall.Screen
 import com.example.vdcall.ui.VdcallTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppTopBar(navController: NavController, title:String, actions:@Composable ()->Unit,ImgSrc:String?,backClick:Boolean=false,backClickDes:String=""){
+fun AppTopBar(navController: NavController, title:String, actions:@Composable ()->Unit,ImgSrc:String?,backClick:Boolean=false){
 
     TopAppBar(
         title = {
             Row(modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = if (backClick) Arrangement.Start else Arrangement.SpaceBetween
-
                 ) {
                 when{
                     backClick->
                         IconButton(
                             onClick = {
-                                if(backClickDes==""){
                                     navController.navigateUp()
-                                }else{
-                                    navController.navigate(backClickDes)
-                                }
+
                 }){
                             Icon(
                                 imageVector = Icons.Filled.ArrowBackIos,

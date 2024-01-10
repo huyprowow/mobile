@@ -1,6 +1,8 @@
 package com.example.vdcall.compose.screen.account
 
+import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.pager.rememberPagerState
@@ -15,12 +17,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.datastore.preferences.core.edit
+import com.example.vdcall.Activity.LoginActivity
 import com.example.vdcall.Activity.SignUpActivity
 import com.example.vdcall.Activity.dataStore
 import com.example.vdcall.MainActivity
 import com.example.vdcall.ui.VdcallTheme
+import com.example.vdcall.utilities.EXAMPLE_COUNTER
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
+suspend fun clearDataStore(context: Context){
+    context.dataStore.edit {
+        it[EXAMPLE_COUNTER]=""
+    }
+
+
+
+}
 @Composable
 fun AccountScreen() {
     val scope= rememberCoroutineScope()
@@ -32,11 +45,10 @@ fun AccountScreen() {
         )
         Button(onClick = {
             scope.launch {
-                context.dataStore.edit {
-                    it.clear()
-                }
+               clearDataStore(context)
+
+                context.startActivity(Intent(context, LoginActivity::class.java).apply {})
             }
-            context.startActivity(Intent(context, SignUpActivity::class.java).apply {})
         }) {
             Text(
                 text = "Đăng xuất"

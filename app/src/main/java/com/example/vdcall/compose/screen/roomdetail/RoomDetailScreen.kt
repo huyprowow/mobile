@@ -71,12 +71,12 @@ fun RoomDetailScreen(navController: NavController, roomId:String, roomName:Strin
     Scaffold(
         topBar = {
             AppTopBar(
-                rememberNavController(),
+                navController,
                 "Phòng ${roomName}",
                 {
                 },
                 "",
-                backClick=true
+                backClick=true,
             )
         })
         {paddingValue->
@@ -212,7 +212,6 @@ fun RoomDetailPreview() {
                     },
                     "",
                     backClick=true,
-                    backClickDes=Screen.Room.route
                 )
             })
         {paddingValue->

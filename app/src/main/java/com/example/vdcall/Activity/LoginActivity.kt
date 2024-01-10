@@ -17,7 +17,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.example.vdcall.MainActivity
 import com.example.vdcall.api.authen.LoginService
 import com.example.vdcall.data.repository.authen.LoginRepository
-import com.example.vdcall.dataStore
 import com.example.vdcall.databinding.ActivityLoginBinding
 import com.example.vdcall.utilities.EXAMPLE_COUNTER
 import kotlinx.coroutines.CoroutineScope
@@ -70,10 +69,14 @@ class LoginActivity
                         }
                       checkUserNameDatastore()
                     }else{
-                        Toast.makeText(applicationContext, "Login Failed!", Toast.LENGTH_SHORT).show()
+                        runOnUiThread {
+                            Toast.makeText(applicationContext, "Login Failed!", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }catch (error: Exception){
-
+                    runOnUiThread {
+                        Toast.makeText(applicationContext, "Login Failed!", Toast.LENGTH_SHORT).show()
+                    }
                     Log.d("Debug", "$error")
                 }
             }

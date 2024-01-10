@@ -1,6 +1,8 @@
 package com.example.vdcall.compose.screen.roomlist
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -68,7 +70,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.vdcall.Screen
 import com.example.vdcall.compose.navigation.AppTopBar
 import com.example.vdcall.data.repository.room.RoomRepository
-import com.example.vdcall.dataStore
+
 import com.example.vdcall.socket.SocketListeners
 import com.example.vdcall.socket.SocketManager
 import com.example.vdcall.ui.VdcallTheme
@@ -102,6 +104,7 @@ fun RoomScreen(navController: NavController,
     val openCreateRoomDialog by  viewModel.openCreateRoomDialog.observeAsState(false)
     val rooms by viewModel.rooms.observeAsState()
     val scope= rememberCoroutineScope()
+    val context= LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()){
         LazyColumn(
@@ -175,7 +178,7 @@ fun RoomScreen(navController: NavController,
                             viewModel.joinRoom(roomName,roomPassword,userName)
                             Log.d("Debug", "Join Room ${roomName},${roomPassword},${userName}")
                             }catch (error: Exception){
-                                Log.d("Debug", "${error}")
+                             Log.d("Debug", "${error}")
 
                          }
                     }

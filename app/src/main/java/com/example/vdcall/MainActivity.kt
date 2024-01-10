@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "preferencesDataStore")
 @AndroidEntryPoint
 
 class MainActivity : ComponentActivity(),CoroutineScope  {
